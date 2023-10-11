@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace steampunkRTS
 {
@@ -8,6 +9,8 @@ namespace steampunkRTS
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        private List<Entity> entities;
 
         public Game1()
         {
@@ -32,10 +35,16 @@ namespace steampunkRTS
 
         protected override void Update(GameTime gameTime)
         {
+            KeyboardState kstate = Keyboard.GetState();
+            MouseState mstate = Mouse.GetState();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
+            foreach (Entity i in entities)
+            {
+                i.update();
+            }
 
             base.Update(gameTime);
         }
