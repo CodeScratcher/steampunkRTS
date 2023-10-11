@@ -43,7 +43,7 @@ namespace steampunkRTS
             // TODO: Add your update logic here
             foreach (Entity i in entities)
             {
-                i.update();
+                i.update(kstate, mstate);
             }
 
             base.Update(gameTime);

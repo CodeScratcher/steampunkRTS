@@ -7,8 +7,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace steampunkRTS
 {
-    internal interface Entity
+    internal class Troop : Entity
     {
-        void update(KeyboardState kstate, MouseState mstate);
+        public void update(KeyboardState kstate, MouseState mstate)
+        {
+
+        }
     }
 }
