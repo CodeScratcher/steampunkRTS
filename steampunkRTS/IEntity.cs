@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace steampunkRTS
 {
-    internal interface Entity
+    internal interface IEntity
     {
         void update(KeyboardState kstate, MouseState mstate);
     }

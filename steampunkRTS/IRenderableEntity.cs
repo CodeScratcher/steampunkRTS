@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace steampunkRTS
 {
-    internal interface IRenderableEntity : Entity
+    internal interface IRenderableEntity : IEntity
     {
         void render();
     }
