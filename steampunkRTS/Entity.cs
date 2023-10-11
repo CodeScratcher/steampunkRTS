@@ -8,5 +8,6 @@ namespace steampunkRTS
 {
     internal interface Entity
     {
+        void update();
     }
 }
