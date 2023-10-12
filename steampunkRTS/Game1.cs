@@ -43,6 +43,25 @@ namespace steampunkRTS
                 Exit();
 
             // TODO: Add your update logic here
+
+            entityTick(kstate, mstate);
+            commandEntities(mstate);
+
+            base.Update(gameTime);
+        }
+
+        private void commandEntities(MouseState mstate)
+        {
+            if (mstate.RightButton == ButtonState.Pressed)
+            {
+                ICommandable commandable = selectedEntity as ICommandable;
+
+                commandable.receiveCommand(Command.MOVE, mstate.X, mstate.Y);
+            }
+        }
+
+        void entityTick(KeyboardState kstate, MouseState mstate)
+        {
             foreach (IEntity entity in entities)
             {
                 entity.update(kstate, mstate);
@@ -55,33 +74,29 @@ namespace steampunkRTS
                     {
                         selectedEntity = entity;
                     }
-                }   
+                }
             }
-
-            if (mstate.RightButton == ButtonState.Pressed)
-            {
-                ICommandable commandable = selectedEntity as ICommandable;
-
-                commandable.receiveCommand(Command.MOVE, mstate.X, mstate.Y);
-            }
-
-            base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            renderEntities();
+
+            base.Draw(gameTime);
+        }
+
+        private void renderEntities()
+        {
             foreach (IEntity entity in entities)
             {
                 IRenderableEntity renderableEntity = entity as IRenderableEntity;
-                if (renderableEntity != null) {
+                if (renderableEntity != null)
+                {
                     renderableEntity.render();
                 }
             }
-
-            base.Draw(gameTime);
         }
     }
 }
