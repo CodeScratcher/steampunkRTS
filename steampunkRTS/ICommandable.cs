@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace steampunkRTS
     }
     internal interface ICommandable
     {
-
-        void receiveCommand(Command command, int x, int y);s
+        Rectangle getBoundingBox();
+        void receiveCommand(Command command, int x, int y);
     }
 }
