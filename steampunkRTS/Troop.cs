@@ -7,8 +7,13 @@ using Microsoft.Xna.Framework.Input;
 
 namespace steampunkRTS
 {
-    internal class Troop : IRenderableEntity
+    internal class Troop : IRenderableEntity, ICommandable
     {
+        public void receiveCommand(Command command, int x, int y)
+        {
+            throw new NotImplementedException();
+        }
+
         public void render()
         {
             throw new NotImplementedException();
