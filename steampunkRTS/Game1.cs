@@ -12,6 +12,7 @@ namespace steampunkRTS
 
         private List<IEntity> entities;
 
+        IEntity selectedEntity = null;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -38,14 +39,30 @@ namespace steampunkRTS
             KeyboardState kstate = Keyboard.GetState();
             MouseState mstate = Mouse.GetState();
 
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
-            foreach (IEntity i in entities)
+            foreach (IEntity entity in entities)
             {
-                i.update(kstate, mstate);
+                entity.update(kstate, mstate);
+
+                ICommandable commandable = entity as ICommandable;
+
+                if (commandable != null)
+                {
+                    if (mstate.LeftButton == ButtonState.Pressed && commandable.getBoundingBox().Contains(mstate.Position))
+                    {
+                        selectedEntity = entity;
+                    }
+                }   
+            }
+
+            if (mstate.RightButton == ButtonState.Pressed)
+            {
+                ICommandable commandable = selectedEntity as ICommandable;
+
+                commandable.receiveCommand(Command.MOVE, mstate.X, mstate.Y);
             }
 
             base.Update(gameTime);
