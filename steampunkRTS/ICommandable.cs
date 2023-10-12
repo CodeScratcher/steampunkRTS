@@ -13,6 +13,6 @@ namespace steampunkRTS
     internal interface ICommandable
     {
 
-        void receiveCommand(Command command, int x, int y);s
+        void receiveCommand(Command command, int x, int y);
     }
 }
