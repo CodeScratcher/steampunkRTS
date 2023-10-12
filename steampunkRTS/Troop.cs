@@ -9,6 +9,7 @@ namespace steampunkRTS
 {
     internal class Troop : IRenderableEntity, ICommandable
     {
+        int x = 0, y = 0;
         public void receiveCommand(Command command, int x, int y)
         {
             throw new NotImplementedException();
