@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace steampunkRTS
@@ -12,6 +13,8 @@ namespace steampunkRTS
     {
         int x = 0, y = 0;
         int width = 32, height = 32;
+
+        public Texture2D texture;
 
         public Rectangle getBoundingBox()
         {
@@ -24,9 +27,9 @@ namespace steampunkRTS
             y = mouseY;
         }
 
-        public void render()
+        public void render(SpriteBatch spriteBatch)
         {
-            throw new NotImplementedException();
+            spriteBatch.Draw(texture, new Vector2(x, y), Color.White);
         }
 
         public void update(KeyboardState kstate, MouseState mstate)

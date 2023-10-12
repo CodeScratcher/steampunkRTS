@@ -23,13 +23,18 @@ namespace steampunkRTS
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            entities = new List<IEntity>(); 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            Troop troop = new Troop();
+
+            troop.texture = this.Content.Load<Texture2D>("trooptest");
+
+            entities.Add(troop);
 
             // TODO: use this.Content to load your game content here
         }
@@ -94,7 +99,7 @@ namespace steampunkRTS
                 IRenderableEntity renderableEntity = entity as IRenderableEntity;
                 if (renderableEntity != null)
                 {
-                    renderableEntity.render();
+                    renderableEntity.render(_spriteBatch);
                 }
             }
         }
