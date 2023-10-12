@@ -37,6 +37,8 @@ namespace steampunkRTS
         {
             KeyboardState kstate = Keyboard.GetState();
             MouseState mstate = Mouse.GetState();
+
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -54,6 +56,13 @@ namespace steampunkRTS
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            foreach (IEntity entity in entities)
+            {
+                IRenderableEntity renderableEntity = entity as IRenderableEntity;
+                if (renderableEntity != null) {
+                    renderableEntity.render();
+                }
+            }
 
             base.Draw(gameTime);
         }
