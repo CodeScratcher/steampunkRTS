@@ -10,7 +10,7 @@ namespace steampunkRTS
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private List<Entity> entities;
+        private List<IEntity> entities;
 
         public Game1()
         {
@@ -41,7 +41,7 @@ namespace steampunkRTS
                 Exit();
 
             // TODO: Add your update logic here
-            foreach (Entity i in entities)
+            foreach (IEntity i in entities)
             {
                 i.update(kstate, mstate);
             }
