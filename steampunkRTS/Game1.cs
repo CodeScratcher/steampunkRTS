@@ -12,6 +12,7 @@ namespace steampunkRTS
 
         private List<IEntity> entities;
 
+        IEntity selectedEntity = null;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -38,33 +39,64 @@ namespace steampunkRTS
             KeyboardState kstate = Keyboard.GetState();
             MouseState mstate = Mouse.GetState();
 
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
-            foreach (IEntity i in entities)
-            {
-                i.update(kstate, mstate);
-            }
+
+            entityTick(kstate, mstate);
+            commandEntities(mstate);
 
             base.Update(gameTime);
+        }
+
+        private void commandEntities(MouseState mstate)
+        {
+            if (mstate.RightButton == ButtonState.Pressed)
+            {
+                ICommandable commandable = selectedEntity as ICommandable;
+
+                commandable.receiveCommand(Command.MOVE, mstate.X, mstate.Y);
+            }
+        }
+
+        void entityTick(KeyboardState kstate, MouseState mstate)
+        {
+            foreach (IEntity entity in entities)
+            {
+                entity.update(kstate, mstate);
+
+                ICommandable commandable = entity as ICommandable;
+
+                if (commandable != null)
+                {
+                    if (mstate.LeftButton == ButtonState.Pressed && commandable.getBoundingBox().Contains(mstate.Position))
+                    {
+                        selectedEntity = entity;
+                    }
+                }
+            }
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            renderEntities();
+
+            base.Draw(gameTime);
+        }
+
+        private void renderEntities()
+        {
             foreach (IEntity entity in entities)
             {
                 IRenderableEntity renderableEntity = entity as IRenderableEntity;
-                if (renderableEntity != null) {
+                if (renderableEntity != null)
+                {
                     renderableEntity.render();
                 }
             }
-
-            base.Draw(gameTime);
         }
     }
 }
