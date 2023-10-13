@@ -57,7 +57,7 @@ namespace steampunkRTS
 
         private void commandEntities(MouseState mstate)
         {
-            if (mstate.RightButton == ButtonState.Pressed)
+            if (mstate.RightButton == ButtonState.Pressed && selectedEntity != null)
             {
                 ICommandable commandable = selectedEntity as ICommandable;
 
@@ -86,8 +86,10 @@ namespace steampunkRTS
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            
+            _spriteBatch.Begin();
             renderEntities();
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
