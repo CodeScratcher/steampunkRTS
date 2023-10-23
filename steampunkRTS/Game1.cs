@@ -30,8 +30,8 @@ namespace steampunkRTS
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            Troop troop = new Troop(0, 0);
-            Troop troop2 = new Troop(64, 64);
+            Troop troop = new Troop(0f, 0f);
+            Troop troop2 = new Troop(64f, 64f);
 
             Texture2D trooptest = this.Content.Load<Texture2D>("trooptest");
             troop.texture = trooptest;

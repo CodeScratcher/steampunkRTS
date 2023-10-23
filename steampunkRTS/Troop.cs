@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,26 +12,26 @@ namespace steampunkRTS
 {
     internal class Troop : IRenderableEntity, ICommandable
     {
-        public int x = 0, y = 0;
+        public float x = 0f, y = 0f;
         int width = 32, height = 32;
 
         int speed = 5;
 
-        int targetX = 0, targetY = 0;
+        float targetX = 0f, targetY = 0f;
 
         public Texture2D texture;
 
-        public Troop(int x, int y)
+        public Troop(float x, float y)
         {
             this.x = x;
             this.y = y;
-            this.targetX = x;
-            this.targetY = y;   
+            targetX = x;
+            targetY = y;   
         }
 
         public Rectangle getBoundingBox()
         {
-            return new Rectangle(x, y, width, height);
+            return new Rectangle((int)x, (int)y, width, height);
         }
 
         public void receiveCommand(Command command, int mouseX, int mouseY)
@@ -46,39 +47,30 @@ namespace steampunkRTS
 
         public void update(KeyboardState kstate, MouseState mstate)
         {
-            if (x < targetX)
-            {
-                x += speed;
-                if (x > targetX)
-                {
-                    x = targetX;
-                }
+            if (targetX - x == 0 && targetY - y == 0) {
+                return;
             }
-            else if (x > targetX)
+            Vector2 movement = Vector2.Normalize(new Vector2(targetX - x, targetY - y)) * speed;
+
+            bool right = x < targetX;
+            bool down = y < targetY;
+            
+            x += movement.X;
+            y += movement.Y;
+
+            bool rightNow = x < targetX;
+            bool downNow = y < targetY;
+
+            if ((right && !rightNow) || (!right && rightNow))
             {
-                x -= speed;
-                if (x < targetX)
-                {
-                    x = targetX;
-                }
+                x = targetX;
             }
 
-            if (y < targetY)
+            if ((down && !downNow) || (!down && downNow))
             {
-                y += speed;
-                if (y > targetY)
-                {
-                    y = targetY;
-                }
+                y = targetY;
             }
-            else if (y > targetY)
-            {
-                y -= speed;
-                if (y < targetY)
-                {
-                    y = targetY;
-                }
-            }
+            
         }
     }
 }
