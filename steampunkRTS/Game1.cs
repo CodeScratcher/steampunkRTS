@@ -67,6 +67,8 @@ namespace steampunkRTS
 
         void entityTick(KeyboardState kstate, MouseState mstate)
         {
+            bool shouldDeselect = true;
+            
             foreach (IEntity entity in entities)
             {
                 entity.update(kstate, mstate);
@@ -78,8 +80,14 @@ namespace steampunkRTS
                     if (mstate.LeftButton == ButtonState.Pressed && commandable.getBoundingBox().Contains(mstate.Position))
                     {
                         selectedEntity = entity;
+                        shouldDeselect = false;
                     }
                 }
+            }
+
+            if (shouldDeselect && mstate.LeftButton == ButtonState.Pressed)
+            {
+                selectedEntity = null;
             }
         }
 
