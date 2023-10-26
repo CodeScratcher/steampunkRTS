@@ -24,7 +24,8 @@ namespace steampunkRTS
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            entities = new List<IEntity>(); 
+            entities = new List<IEntity>();
+            playerController = new PlayerController();
             base.Initialize();
         }
 
