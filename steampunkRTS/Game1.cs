@@ -12,7 +12,8 @@ namespace steampunkRTS
 
         private List<IEntity> entities;
 
-        IEntity selectedEntity = null;
+        private PlayerController playerController;
+        
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -54,44 +55,21 @@ namespace steampunkRTS
             // TODO: Add your update logic here
 
             entityTick(kstate, mstate);
-            commandEntities(mstate);
+            playerController.commandEntities(kstate, mstate, entities);
 
             base.Update(gameTime);
         }
 
         private void commandEntities(MouseState mstate)
         {
-            if (mstate.RightButton == ButtonState.Pressed && selectedEntity != null)
-            {
-                ICommandable commandable = selectedEntity as ICommandable;
-
-                commandable.receiveCommand(Command.MOVE, mstate.X, mstate.Y);
-            }
+            
         }
 
         void entityTick(KeyboardState kstate, MouseState mstate)
-        {
-            bool shouldDeselect = true;
-            
+        {   
             foreach (IEntity entity in entities)
             {
                 entity.update(kstate, mstate);
-
-                ICommandable commandable = entity as ICommandable;
-
-                if (commandable != null)
-                {
-                    if (mstate.LeftButton == ButtonState.Pressed && commandable.getBoundingBox().Contains(mstate.Position))
-                    {
-                        selectedEntity = entity;
-                        shouldDeselect = false;
-                    }
-                }
-            }
-
-            if (shouldDeselect && mstate.LeftButton == ButtonState.Pressed)
-            {
-                selectedEntity = null;
             }
         }
 
