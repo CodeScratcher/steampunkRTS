@@ -16,10 +16,10 @@ namespace steampunkRTS
         {
             if (mstate.LeftButton == ButtonState.Pressed)
             {
+                bool shouldDeselect = true;
                 foreach (IEntity entity in entities)
                 {
                     ICommandable commandable = entity as ICommandable;
-                    bool shouldDeselect = true;
 
                     if (commandable != null)
                     {
@@ -28,12 +28,12 @@ namespace steampunkRTS
                             selectedEntity = commandable;
                             shouldDeselect = false;
                         }
-                    }
+                    }   
+                }
 
-                    if (shouldDeselect)
-                    {
-                        selectedEntity = null;
-                    }
+                if (shouldDeselect)
+                {
+                    selectedEntity = null;
                 }
             }
 
