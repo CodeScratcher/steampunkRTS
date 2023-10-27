@@ -34,7 +34,7 @@ namespace steampunkRTS
             return new Rectangle((int)x, (int)y, width, height);
         }
 
-        public void receiveCommand(Command command, int mouseX, int mouseY)
+        public void receiveCommand(Command command, string guiCommand, int mouseX, int mouseY)
         {
             targetX = mouseX;
             targetY = mouseY;
@@ -75,7 +75,7 @@ namespace steampunkRTS
 
         public List<string> getGuiCommands()
         {
-            return new List<string>;
+            return new List<string>();
         }
     }
 }
