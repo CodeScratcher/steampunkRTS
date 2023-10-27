@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using Myra;
+using Myra.Graphics2D.UI;
 
 namespace steampunkRTS
 {
@@ -13,7 +15,9 @@ namespace steampunkRTS
         private List<IEntity> entities;
 
         private PlayerController playerController;
-        
+
+        private Desktop _desktop;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -42,6 +46,28 @@ namespace steampunkRTS
             entities.Add(troop);
             entities.Add(troop2);
 
+            MyraEnvironment.Game = this;
+
+            var grid = new Grid
+            {
+                RowSpacing = 8,
+                ColumnSpacing = 8
+            };
+
+            grid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+            grid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+            grid.RowsProportions.Add(new Proportion(ProportionType.Auto));
+            grid.RowsProportions.Add(new Proportion(ProportionType.Auto));
+
+            var helloWorld = new Label
+            {
+                Id = "label",
+                Text = "Hello, World!"
+            };
+            grid.Widgets.Add(helloWorld);
+
+            _desktop = new Desktop();
+            _desktop.Root = grid;
             // TODO: use this.Content to load your game content here
         }
 
@@ -81,6 +107,8 @@ namespace steampunkRTS
             _spriteBatch.Begin();
             renderEntities();
             _spriteBatch.End();
+
+            _desktop.Render();
 
             base.Draw(gameTime);
         }
