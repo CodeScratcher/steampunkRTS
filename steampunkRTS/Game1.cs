@@ -59,12 +59,23 @@ namespace steampunkRTS
             grid.RowsProportions.Add(new Proportion(ProportionType.Auto));
             grid.RowsProportions.Add(new Proportion(ProportionType.Auto));
 
-            var helloWorld = new Label
+            var button = new TextButton
             {
-                Id = "label",
-                Text = "Hello, World!"
+                Text = "New Troop"
             };
-            grid.Widgets.Add(helloWorld);
+            Grid.SetColumn(button, 8);
+            Grid.SetRow(button, 1);
+
+            button.Click += (s, a) => {
+                Troop newTroop = new Troop(10.0f, 10.0f);
+
+                newTroop.texture = trooptest;
+
+                entities.Add(newTroop);
+
+            };
+
+            grid.Widgets.Add(button);
 
             _desktop = new Desktop();
             _desktop.Root = grid;
