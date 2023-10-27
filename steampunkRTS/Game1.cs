@@ -29,7 +29,6 @@ namespace steampunkRTS
         {
             // TODO: Add your initialization logic here
             entities = new List<IEntity>();
-            playerController = new PlayerController();
             base.Initialize();
         }
 
@@ -59,27 +58,10 @@ namespace steampunkRTS
             grid.RowsProportions.Add(new Proportion(ProportionType.Auto));
             grid.RowsProportions.Add(new Proportion(ProportionType.Auto));
 
-            var button = new TextButton
-            {
-                Text = "New Troop"
-            };
-            Grid.SetColumn(button, 8);
-            Grid.SetRow(button, 1);
-
-            button.Click += (s, a) => {
-                Troop newTroop = new Troop(10.0f, 10.0f);
-
-                newTroop.texture = trooptest;
-
-                entities.Add(newTroop);
-
-            };
-
-            grid.Widgets.Add(button);
-
             _desktop = new Desktop();
             _desktop.Root = grid;
-            // TODO: use this.Content to load your game content here
+
+            playerController = new PlayerController(grid);
         }
 
         protected override void Update(GameTime gameTime)

@@ -72,5 +72,10 @@ namespace steampunkRTS
             }
             
         }
+
+        public List<string> getGuiCommands()
+        {
+            return new List<string>;
+        }
     }
 }

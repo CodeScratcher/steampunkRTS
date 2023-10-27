@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 namespace steampunkRTS
 {
     enum Command { 
-        MOVE
+        MOVE,
+        GUI_COMMAND
     }
     internal interface ICommandable
     {
+        List<String> getGuiCommands();
         Rectangle getBoundingBox();
-        void receiveCommand(Command command, int x, int y);
+        void receiveCommand(Command command, string guiType, int x, int y);
     }
 }
