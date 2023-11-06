@@ -12,14 +12,17 @@ namespace steampunkRTS
     internal class Factory : IRenderableEntity, ICommandable
     {
 
-        int x = 0, y = 0, width = 0, height = 0;
+        public float x = 0, y = 0;
+        int width = 0, height = 0;
 
-        int targetX, targetY;
+        float targetX, targetY;
 
-        Texture texture;
+        public Texture2D texture;
+        public Texture2D troopTexture;
+
         public Rectangle getBoundingBox()
         {
-            return new Rectangle(x, y, width, height);
+            return new Rectangle((int)x, (int)y, width, height);
         }
 
         public List<string> getGuiCommands()
@@ -29,14 +32,27 @@ namespace steampunkRTS
             };
         }
 
-        public void receiveCommand(Command command, string guiType, int x, int y)
+        public void receiveCommand(Command command, string guiType, int x, int y, List<IEntity> entities)
         {
-            throw new NotImplementedException();
+            switch (command)
+            {
+                case Command.MOVE:
+                    targetX = x;
+                    targetY = y;
+                    break;
+                case Command.GUI_COMMAND:
+                    Troop troop = new Troop(x, y);
+                    troop.targetX = targetX;
+                    troop.targetY = targetY;
+                    troop.texture = troopTexture;
+                    entities.Add(troop);
+                    break;
+            }
         }
 
         public void render(SpriteBatch spriteBatch)
         {
-            throw new NotImplementedException();
+            spriteBatch.Draw(texture, new Vector2(x, y), Color.White);
         }
 
         public void update(KeyboardState kstate, MouseState mstate)

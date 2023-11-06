@@ -16,6 +16,6 @@ namespace steampunkRTS
     {
         List<String> getGuiCommands();
         Rectangle getBoundingBox();
-        void receiveCommand(Command command, string guiType, int x, int y);
+        void receiveCommand(Command command, string guiType, int x, int y, List<IEntity> entities);
     }
 }

@@ -29,8 +29,10 @@ namespace steampunkRTS
             buttons.Clear(); 
         }
 
-        private void generateButtons(ICommandable entity)
+        private void generateButtons(ICommandable entity, List<IEntity> entities)
         {
+
+            removeButtons();
 
             int i = 0;
             foreach (string str in entity.getGuiCommands())
@@ -42,7 +44,7 @@ namespace steampunkRTS
 
                 button.Click += (s, a) =>
                 {
-                    selectedEntity.receiveCommand(Command.GUI_COMMAND, str, 0, 0);
+                    selectedEntity.receiveCommand(Command.GUI_COMMAND, str, 0, 0, entities);
                 };
 
                 Grid.SetColumn(button, 8);
@@ -57,6 +59,7 @@ namespace steampunkRTS
             if (mstate.LeftButton == ButtonState.Pressed)
             {
                 bool shouldDeselect = true;
+
                 foreach (IEntity entity in entities)
                 {
                     ICommandable commandable = entity as ICommandable;
@@ -81,7 +84,7 @@ namespace steampunkRTS
 
             if (mstate.RightButton == ButtonState.Pressed && selectedEntity != null)
             {
-                selectedEntity.receiveCommand(Command.MOVE, null, mstate.X, mstate.Y);
+                selectedEntity.receiveCommand(Command.MOVE, null, mstate.X, mstate.Y, entities);
             }
         }
     }

@@ -17,7 +17,7 @@ namespace steampunkRTS
 
         int speed = 5;
 
-        float targetX = 0f, targetY = 0f;
+        public float targetX = 0f, targetY = 0f;
 
         public Texture2D texture;
 
@@ -34,7 +34,7 @@ namespace steampunkRTS
             return new Rectangle((int)x, (int)y, width, height);
         }
 
-        public void receiveCommand(Command command, string guiCommand, int mouseX, int mouseY)
+        public void receiveCommand(Command command, string guiCommand, int mouseX, int mouseY, List<IEntity> entities)
         {
             targetX = mouseX;
             targetY = mouseY;
