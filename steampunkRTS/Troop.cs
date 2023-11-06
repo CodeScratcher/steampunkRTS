@@ -36,8 +36,13 @@ namespace steampunkRTS
 
         public void receiveCommand(Command command)
         {
-            targetX = mouseX;
-            targetY = mouseY;
+            MoveCommand moveCommand = command as MoveCommand;
+
+            if (moveCommand != null)
+            {
+                targetX = moveCommand.x;
+                targetY = moveCommand.y;
+            }
         }
 
         public void render(SpriteBatch spriteBatch)

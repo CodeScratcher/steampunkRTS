@@ -34,19 +34,24 @@ namespace steampunkRTS
 
         public void receiveCommand(Command command)
         {
-            switch (command)
+            GuiCommand guiCommand = command as GuiCommand;
+
+            if (guiCommand != null && guiCommand.id == "Make Troop")
             {
-                case Command.MOVE:
-                    targetX = x;
-                    targetY = y;
-                    break;
-                case Command.GUI_COMMAND:
-                    Troop troop = new Troop(x, y);
-                    troop.targetX = targetX;
-                    troop.targetY = targetY;
-                    troop.texture = troopTexture;
-                    entities.Add(troop);
-                    break;
+                Troop troop = new Troop(x, y);
+                troop.targetX = targetX;
+                troop.targetY = targetY;
+                troop.texture = troopTexture;
+                guiCommand.entities.Add(troop);
+            }
+            else
+            {
+                MoveCommand moveCommand = command as MoveCommand;
+                if (moveCommand != null)
+                {
+                    targetX = moveCommand.x;
+                    targetY = moveCommand.y;
+                }
             }
         }
 

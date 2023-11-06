@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace steampunkRTS
 {
-    []
-    internal class MoveCommand
+    public class MoveCommand : Command
     {
+        public float x, y;
+
+        public MoveCommand(float x, float y)
+        {
+            this.x = x;
+            this.y = y;
+        }
     }
 }

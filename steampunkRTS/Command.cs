@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace steampunkRTS
 {
-    internal abstract class Command
+    public abstract class Command
     {
     }
 }
