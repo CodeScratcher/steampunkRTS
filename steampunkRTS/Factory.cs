@@ -13,7 +13,7 @@ namespace steampunkRTS
     {
 
         public float x = 0, y = 0;
-        int width = 0, height = 0;
+        int width = 32, height = 32;
 
         float targetX, targetY;
 
@@ -57,7 +57,7 @@ namespace steampunkRTS
 
         public void update(KeyboardState kstate, MouseState mstate)
         {
-            throw new NotImplementedException();
+        
         }
     }
 }

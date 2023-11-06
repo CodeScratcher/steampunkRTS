@@ -18,6 +18,7 @@ namespace steampunkRTS
         
         public PlayerController(Grid grid)
         {
+            buttons = new List<TextButton>();
             this.grid = grid;
         }
 
@@ -44,14 +45,20 @@ namespace steampunkRTS
 
                 button.Click += (s, a) =>
                 {
-                    selectedEntity.receiveCommand(Command.GUI_COMMAND, str, 0, 0, entities);
+                    entity.receiveCommand(Command.GUI_COMMAND, str, 0, 0, entities);
                 };
 
                 Grid.SetColumn(button, 8);
                 Grid.SetRow(button, i);
 
+                grid.Widgets.Add(button);
+
+                buttons.Add(button);
+
                 i++;
             }
+
+            
         }
 
         public void commandEntities(KeyboardState kstate, MouseState mstate, List<IEntity> entities)
@@ -69,10 +76,18 @@ namespace steampunkRTS
                         if (commandable.getBoundingBox().Contains(new Vector2(mstate.X, mstate.Y)))
                         {
                             selectedEntity = commandable;
-                            generateButtons(selectedEntity);
+                            generateButtons(selectedEntity, entities);
                             shouldDeselect = false;
                         }
                     }   
+                }
+
+                foreach (TextButton button in buttons)
+                {
+                    if (button.ContainsGlobalPoint(new Point(mstate.X, mstate.Y)))
+                    {
+                        shouldDeselect = false;
+                    }
                 }
 
                 if (shouldDeselect)
