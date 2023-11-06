@@ -49,7 +49,7 @@ namespace steampunkRTS
 
                 button.Click += (s, a) =>
                 {
-                    entity.receiveCommand(Command.GUI_COMMAND, str, 0, 0, entities);
+                    entity.receiveCommand(Command.GUI_COMMAND);
                 };
 
                 Grid.SetColumn(button, 8);
@@ -103,7 +103,7 @@ namespace steampunkRTS
 
             if (mstate.RightButton == ButtonState.Pressed && selectedEntity != null)
             {
-                selectedEntity.receiveCommand(Command.MOVE, null, mstate.X, mstate.Y, entities);
+                selectedEntity.receiveCommand(Command.MOVE);
             }
         }
     }

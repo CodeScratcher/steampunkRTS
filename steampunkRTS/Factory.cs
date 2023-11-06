@@ -32,7 +32,7 @@ namespace steampunkRTS
             };
         }
 
-        public void receiveCommand(Command command, string guiType, int x, int y, List<IEntity> entities)
+        public void receiveCommand(Command command)
         {
             switch (command)
             {
