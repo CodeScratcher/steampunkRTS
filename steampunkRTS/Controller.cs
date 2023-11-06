@@ -9,6 +9,6 @@ namespace steampunkRTS
 {
     internal interface Controller
     {
-        void commandEntities(KeyboardState keyboardState, MouseState mouseState, List<IEntity> entities);
+        void commandEntities(KeyboardState keyboardState, MouseState mouseState);
     }
 }

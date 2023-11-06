@@ -61,7 +61,8 @@ namespace steampunkRTS
             _desktop = new Desktop();
             _desktop.Root = grid;
 
-            playerController = new PlayerController(grid);
+            playerController = new PlayerController(grid, entities);
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -75,7 +76,7 @@ namespace steampunkRTS
             // TODO: Add your update logic here
 
             entityTick(kstate, mstate);
-            playerController.commandEntities(kstate, mstate, entities);
+            playerController.commandEntities(kstate, mstate);
 
             base.Update(gameTime);
         }

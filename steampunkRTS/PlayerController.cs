@@ -14,12 +14,16 @@ namespace steampunkRTS
         ICommandable selectedEntity;
 
         public List<TextButton> buttons;
+
+        public List<IEntity> entities;
+
         public Grid grid;
         
-        public PlayerController(Grid grid)
+        public PlayerController(Grid grid, List<IEntity> entities)
         {
             buttons = new List<TextButton>();
             this.grid = grid;
+            this.entities = entities;
         }
 
         private void removeButtons() { 
@@ -30,7 +34,7 @@ namespace steampunkRTS
             buttons.Clear(); 
         }
 
-        private void generateButtons(ICommandable entity, List<IEntity> entities)
+        private void generateButtons(ICommandable entity)
         {
 
             removeButtons();
@@ -61,7 +65,7 @@ namespace steampunkRTS
             
         }
 
-        public void commandEntities(KeyboardState kstate, MouseState mstate, List<IEntity> entities)
+        public void commandEntities(KeyboardState kstate, MouseState mstate)
         {
             if (mstate.LeftButton == ButtonState.Pressed)
             {
@@ -76,7 +80,7 @@ namespace steampunkRTS
                         if (commandable.getBoundingBox().Contains(new Vector2(mstate.X, mstate.Y)))
                         {
                             selectedEntity = commandable;
-                            generateButtons(selectedEntity, entities);
+                            generateButtons(selectedEntity);
                             shouldDeselect = false;
                         }
                     }   
