@@ -18,12 +18,23 @@ namespace steampunkRTS
         public List<IEntity> entities;
 
         public Grid grid;
+
+        public int money = 100;
+
+        public Label label;
         
         public PlayerController(Grid grid, List<IEntity> entities)
         {
             buttons = new List<TextButton>();
             this.grid = grid;
             this.entities = entities;
+
+            label = new Label();
+
+            Grid.SetColumn(label, 8);
+            label.Text = money.ToString();
+
+            grid.Widgets.Add(label);
         }
 
         private void removeButtons() { 
@@ -39,7 +50,7 @@ namespace steampunkRTS
 
             removeButtons();
 
-            int i = 0;
+            int i = 1;
             foreach (string str in entity.getGuiCommands())
             {
                 TextButton button = new TextButton
@@ -49,7 +60,14 @@ namespace steampunkRTS
 
                 button.Click += (s, a) =>
                 {
-                    entity.receiveCommand(new GuiCommand(str, entities));
+                    if (money >= 15)
+                    {
+                        entity.receiveCommand(new GuiCommand(str, entities));
+                        money -= 15;
+                    }
+                    
+
+                    label.Text = money.ToString();
                 };
 
                 Grid.SetColumn(button, 8);
