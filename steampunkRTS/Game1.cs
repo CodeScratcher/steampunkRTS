@@ -35,15 +35,6 @@ namespace steampunkRTS
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            Factory factory = new Factory();
-
-            Texture2D trooptest = this.Content.Load<Texture2D>("trooptest");
-            Texture2D factorytest = this.Content.Load<Texture2D>("factorytest");
-            
-            factory.troopTexture = trooptest;
-            factory.texture = factorytest;
-
-            entities.Add(factory);
 
             MyraEnvironment.Game = this;
 

@@ -14,6 +14,7 @@ namespace steampunkRTS
         ICommandable selectedEntity;
 
         public List<TextButton> buttons;
+        public List<TextButton> globalButtons;
 
         public List<IEntity> entities;
 
@@ -51,7 +52,7 @@ namespace steampunkRTS
             removeButtons();
 
             int i = 1;
-            foreach (string str in entity.getGuiCommands())
+            foreach ((string str, int cost) in entity.getGuiCommands())
             {
                 TextButton button = new TextButton
                 {
@@ -60,10 +61,10 @@ namespace steampunkRTS
 
                 button.Click += (s, a) =>
                 {
-                    if (money >= 15)
+                    if (money >= cost)
                     {
                         entity.receiveCommand(new GuiCommand(str, entities));
-                        money -= 15;
+                        money -= cost;
                     }
                     
 
@@ -105,6 +106,13 @@ namespace steampunkRTS
                 }
 
                 foreach (TextButton button in buttons)
+                {
+                    if (button.ContainsGlobalPoint(new Point(mstate.X, mstate.Y)))
+                    {
+                        shouldDeselect = false;
+                    }
+                }
+                foreach (TextButton button in globalButtons)
                 {
                     if (button.ContainsGlobalPoint(new Point(mstate.X, mstate.Y)))
                     {

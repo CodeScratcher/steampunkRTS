@@ -10,7 +10,7 @@ namespace steampunkRTS
 {
     internal interface ICommandable
     {
-        List<String> getGuiCommands();
+        List<(string, int)> getGuiCommands();
         Rectangle getBoundingBox();
         void receiveCommand(Command command);
     }

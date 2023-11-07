@@ -25,10 +25,10 @@ namespace steampunkRTS
             return new Rectangle((int)x, (int)y, width, height);
         }
 
-        public List<string> getGuiCommands()
+        public List<(string, int)> getGuiCommands()
         {
-            return new List<string> { 
-                "Make Troop"
+            return new List<(string, int)> { 
+                ("Make Troop", 15)
             };
         }
 

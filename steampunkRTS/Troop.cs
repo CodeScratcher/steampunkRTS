@@ -78,9 +78,9 @@ namespace steampunkRTS
             
         }
 
-        public List<string> getGuiCommands()
+        public List<(string, int)> getGuiCommands()
         {
-            return new List<string>();
+            return new List<(string, int)>();
         }
     }
 }
