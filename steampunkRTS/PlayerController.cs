@@ -27,6 +27,7 @@ namespace steampunkRTS
         public PlayerController(Grid grid, List<IEntity> entities)
         {
             buttons = new List<TextButton>();
+            globalButtons = new List<TextButton>();
             this.grid = grid;
             this.entities = entities;
 
