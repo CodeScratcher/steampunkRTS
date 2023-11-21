@@ -52,7 +52,7 @@ namespace steampunkRTS
             _desktop = new Desktop();
             _desktop.Root = grid;
 
-            playerController = new PlayerController(grid, entities);
+            playerController = new PlayerController(grid, entities, Content);
 
         }
 
@@ -70,11 +70,6 @@ namespace steampunkRTS
             playerController.commandEntities(kstate, mstate);
 
             base.Update(gameTime);
-        }
-
-        private void commandEntities(MouseState mstate)
-        {
-            
         }
 
         void entityTick(KeyboardState kstate, MouseState mstate)

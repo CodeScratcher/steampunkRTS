@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Myra.Attributes;
 using Myra.Graphics2D.UI;
 using System;
 using System.Collections.Generic;
@@ -11,6 +14,13 @@ namespace steampunkRTS
 {
     internal class PlayerController : Controller
     {
+        private enum ControllerState
+        {
+            NORMAL,
+            PLACING_FACTORY,
+            PLACING_FABRICATOR
+        }
+
         ICommandable selectedEntity;
 
         public List<TextButton> buttons;
@@ -23,8 +33,13 @@ namespace steampunkRTS
         public int money = 100;
 
         public Label label;
-        
-        public PlayerController(Grid grid, List<IEntity> entities)
+
+        private ControllerState mode;
+
+        private Texture2D factory;
+        private Texture2D troop;
+
+        public PlayerController(Grid grid, List<IEntity> entities, ContentManager content)
         {
             buttons = new List<TextButton>();
             globalButtons = new List<TextButton>();
@@ -37,6 +52,27 @@ namespace steampunkRTS
             label.Text = money.ToString();
 
             grid.Widgets.Add(label);
+
+            TextButton button = new TextButton
+            {
+                Text = "Place Factory"
+            };
+
+            button.Click += (s, a) =>
+            {
+                if (money > 20)
+                {
+                    mode = ControllerState.PLACING_FACTORY;
+                }
+            };
+
+            globalButtons.Add(button);
+
+            Grid.SetColumn(button, 6);
+            grid.Widgets.Add(button);
+
+            factory = content.Load<Texture2D>("factorytest");
+            troop = content.Load<Texture2D>("trooptest");
         }
 
         private void removeButtons() { 
@@ -89,46 +125,65 @@ namespace steampunkRTS
         {
             if (mstate.LeftButton == ButtonState.Pressed)
             {
-                bool shouldDeselect = true;
+                if (mode == ControllerState.NORMAL) { 
+                    bool shouldDeselect = true;
 
-                foreach (IEntity entity in entities)
-                {
-                    ICommandable commandable = entity as ICommandable;
-
-                    if (commandable != null)
+                    foreach (IEntity entity in entities)
                     {
-                        if (commandable.getBoundingBox().Contains(new Vector2(mstate.X, mstate.Y)))
+                        ICommandable commandable = entity as ICommandable;
+
+                        if (commandable != null)
                         {
-                            selectedEntity = commandable;
-                            generateButtons(selectedEntity);
+                            if (commandable.getBoundingBox().Contains(new Vector2(mstate.X, mstate.Y)))
+                            {
+                                selectedEntity = commandable;
+                                generateButtons(selectedEntity);
+                                shouldDeselect = false;
+                            }
+                        }   
+                    }
+
+                    foreach (TextButton button in buttons)
+                    {
+                        if (button.ContainsGlobalPoint(new Point(mstate.X, mstate.Y)))
+                        {
                             shouldDeselect = false;
                         }
-                    }   
-                }
-
-                foreach (TextButton button in buttons)
-                {
-                    if (button.ContainsGlobalPoint(new Point(mstate.X, mstate.Y)))
+                    }
+                    foreach (TextButton button in globalButtons)
                     {
-                        shouldDeselect = false;
+                        if (button.ContainsGlobalPoint(new Point(mstate.X, mstate.Y)))
+                        {
+                            shouldDeselect = false;
+                        }
+                    }
+
+                    if (shouldDeselect)
+                    {
+                        removeButtons();
+                        selectedEntity = null;
                     }
                 }
-                foreach (TextButton button in globalButtons)
+                else if (mode == ControllerState.PLACING_FACTORY)
                 {
-                    if (button.ContainsGlobalPoint(new Point(mstate.X, mstate.Y)))
-                    {
-                        shouldDeselect = false;
-                    }
-                }
+                    Factory newFactory = new Factory();
+                    newFactory.x = mstate.X;
+                    newFactory.targetX = mstate.X;
 
-                if (shouldDeselect)
-                {
-                    removeButtons();
-                    selectedEntity = null;
+                    newFactory.y = mstate.Y;
+                    newFactory.targetY = mstate.Y;
+
+                    newFactory.texture = factory;
+                    newFactory.troopTexture = troop;
+
+                    entities.Add(newFactory);
+
+                    money -= 15;
+                    mode = ControllerState.NORMAL;
                 }
             }
 
-            if (mstate.RightButton == ButtonState.Pressed && selectedEntity != null)
+            if (mstate.RightButton == ButtonState.Pressed && selectedEntity != null && mode == ControllerState.NORMAL)
             {
                 selectedEntity.receiveCommand(new MoveCommand(mstate.X, mstate.Y));
             }

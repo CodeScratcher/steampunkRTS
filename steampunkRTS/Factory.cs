@@ -15,7 +15,7 @@ namespace steampunkRTS
         public float x = 0, y = 0;
         int width = 32, height = 32;
 
-        float targetX, targetY;
+        public float targetX, targetY;
 
         public Texture2D texture;
         public Texture2D troopTexture;
