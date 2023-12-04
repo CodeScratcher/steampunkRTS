@@ -66,17 +66,17 @@ namespace steampunkRTS
 
             // TODO: Add your update logic here
 
-            entityTick(kstate, mstate);
+            entityTick(kstate, mstate, gameTime);
             playerController.commandEntities(kstate, mstate);
 
             base.Update(gameTime);
         }
 
-        void entityTick(KeyboardState kstate, MouseState mstate)
+        void entityTick(KeyboardState kstate, MouseState mstate, GameTime gameTime)
         {   
             foreach (IEntity entity in entities)
             {
-                entity.update(kstate, mstate);
+                entity.update(kstate, mstate, gameTime);
             }
         }
 

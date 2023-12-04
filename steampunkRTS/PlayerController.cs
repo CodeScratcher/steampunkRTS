@@ -18,7 +18,7 @@ namespace steampunkRTS
         {
             NORMAL,
             PLACING_FACTORY,
-            PLACING_FABRICATOR
+            PLACING_MINE
         }
 
         ICommandable selectedEntity;
@@ -38,6 +38,7 @@ namespace steampunkRTS
 
         private Texture2D factory;
         private Texture2D troop;
+        private Texture2D mine;
 
         public PlayerController(Grid grid, List<IEntity> entities, ContentManager content)
         {
@@ -60,10 +61,11 @@ namespace steampunkRTS
 
             button.Click += (s, a) =>
             {
-                if (money > 20)
+                if (money >= 15)
                 {
                     mode = ControllerState.PLACING_FACTORY;
                 }
+                
             };
 
             globalButtons.Add(button);
@@ -71,8 +73,28 @@ namespace steampunkRTS
             Grid.SetColumn(button, 6);
             grid.Widgets.Add(button);
 
+            TextButton mineButton = new TextButton
+            {
+                Text = "Place Mine"
+            };
+
+            mineButton.Click += (s, a) =>
+            {
+                if (money >= 75)
+                {
+                    mode = ControllerState.PLACING_MINE;
+                }
+            };
+
+            globalButtons.Add(mineButton);
+
+            Grid.SetColumn(mineButton, 6);
+            Grid.SetRow(mineButton, 1);
+            grid.Widgets.Add(mineButton);
+
             factory = content.Load<Texture2D>("factorytest");
             troop = content.Load<Texture2D>("trooptest");
+            mine = content.Load<Texture2D>("minetest");
         }
 
         private void removeButtons() { 
@@ -179,6 +201,24 @@ namespace steampunkRTS
                     entities.Add(newFactory);
 
                     money -= 15;
+                    label.Text = money.ToString();
+                    mode = ControllerState.NORMAL;
+                }
+                else if (mode == ControllerState.PLACING_MINE)
+                {
+                    Mine newMine = new Mine();
+
+                    newMine.x = mstate.X;
+                    newMine.y = mstate.Y;
+
+                    newMine.texture = mine;
+
+                    newMine.controller = this;
+
+                    entities.Add(newMine);
+
+                    money -= 75;
+                    label.Text = money.ToString();
                     mode = ControllerState.NORMAL;
                 }
             }
@@ -187,6 +227,17 @@ namespace steampunkRTS
             {
                 selectedEntity.receiveCommand(new MoveCommand(mstate.X, mstate.Y));
             }
+        }
+
+        public void setMoney(int x)
+        {
+            label.Text = money.ToString();
+            money = x;
+        }
+
+        public int getMoney()
+        {
+            return money;
         }
     }
 }

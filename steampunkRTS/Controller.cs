@@ -9,6 +9,9 @@ namespace steampunkRTS
 {
     internal interface Controller
     {
+
+        void setMoney(int x);
+        int getMoney();
         void commandEntities(KeyboardState keyboardState, MouseState mouseState);
     }
 }

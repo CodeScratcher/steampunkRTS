@@ -50,7 +50,7 @@ namespace steampunkRTS
             spriteBatch.Draw(texture, new Vector2(x, y), Color.White);
         }
 
-        public void update(KeyboardState kstate, MouseState mstate)
+        public void update(KeyboardState kstate, MouseState mstate, GameTime gameTime)
         {
             if (targetX - x == 0 && targetY - y == 0) {
                 return;
