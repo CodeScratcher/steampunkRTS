@@ -12,16 +12,43 @@ namespace steampunkRTS
         int money = 100;
 
         public List<IEntity> entities;
+
+        float averageX = 0;
+        float averageY = 0;
         public void commandEntities(KeyboardState keyboardState, MouseState mouseState)
         {
+            float newAverageX = 0;
+            float newAverageY = 0;
+
+            int numberOfEnemies = 0;
             foreach (IEntity entity in entities)
             {
                 EnemyTroop troop = entity as EnemyTroop;
                 if (troop != null)
                 {
-                    troop.receiveCommand(new MoveCommand(0, 0));
+                    if (averageX != 0 && averageY != 0)
+                    {
+                        troop.receiveCommand(new MoveCommand(averageX, averageY));
+                    }
+                }
+                else
+                {
+                    Troop playerTroop = entity as Troop;
+                    if (playerTroop != null)
+                    {
+                        newAverageX += playerTroop.x;
+                        newAverageY += playerTroop.y;
+                    }
                 }
             }
+
+            if (numberOfEnemies != 0)
+            {
+                averageX = newAverageX / numberOfEnemies;
+                averageY = newAverageY / numberOfEnemies;
+            }
+
+            
         }
 
         public int getMoney()
