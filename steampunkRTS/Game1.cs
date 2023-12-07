@@ -52,7 +52,13 @@ namespace steampunkRTS
             _desktop = new Desktop();
             _desktop.Root = grid;
 
-            playerController = new PlayerController(grid, entities, Content);
+            TextureMap map = new TextureMap();
+
+            map.Add(TextureID.FACTORY, Content.Load<Texture2D>("factorytest"));
+            map.Add(TextureID.MINE, Content.Load<Texture2D>("minetest"));
+            map.Add(TextureID.TROOP, Content.Load<Texture2D>("trooptest"));
+
+            playerController = new PlayerController(grid, entities, map);
 
         }
 

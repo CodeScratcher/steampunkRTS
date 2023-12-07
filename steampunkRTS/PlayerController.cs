@@ -36,11 +36,9 @@ namespace steampunkRTS
 
         private ControllerState mode;
 
-        private Texture2D factory;
-        private Texture2D troop;
-        private Texture2D mine;
+        private TextureMap map;
 
-        public PlayerController(Grid grid, List<IEntity> entities, ContentManager content)
+        public PlayerController(Grid grid, List<IEntity> entities, TextureMap map)
         {
             buttons = new List<TextButton>();
             globalButtons = new List<TextButton>();
@@ -92,9 +90,7 @@ namespace steampunkRTS
             Grid.SetRow(mineButton, 1);
             grid.Widgets.Add(mineButton);
 
-            factory = content.Load<Texture2D>("factorytest");
-            troop = content.Load<Texture2D>("trooptest");
-            mine = content.Load<Texture2D>("minetest");
+            this.map = map;
         }
 
         private void removeButtons() { 
@@ -195,8 +191,8 @@ namespace steampunkRTS
                     newFactory.y = mstate.Y;
                     newFactory.targetY = mstate.Y;
 
-                    newFactory.texture = factory;
-                    newFactory.troopTexture = troop;
+                    newFactory.texture = map.Get(TextureID.FACTORY);
+                    newFactory.troopTexture = map.Get(TextureID.TROOP);
 
                     entities.Add(newFactory);
 
@@ -211,7 +207,7 @@ namespace steampunkRTS
                     newMine.x = mstate.X;
                     newMine.y = mstate.Y;
 
-                    newMine.texture = mine;
+                    newMine.texture = map.Get(TextureID.MINE);
 
                     newMine.controller = this;
 
