@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Comora;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -6,6 +7,7 @@ using Myra.Attributes;
 using Myra.Graphics2D.UI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,8 +40,11 @@ namespace steampunkRTS
 
         private TextureMap map;
 
-        public PlayerController(Grid grid, List<IEntity> entities, TextureMap map)
+        private Camera camera;
+
+        public PlayerController(Grid grid, Camera camera, List<IEntity> entities, TextureMap map)
         {
+            this.camera = camera;
             buttons = new List<TextButton>();
             globalButtons = new List<TextButton>();
             this.grid = grid;
@@ -141,6 +146,14 @@ namespace steampunkRTS
 
         public void commandEntities(KeyboardState kstate, MouseState mstate)
         {
+            Vector2 mousePosition;
+            Vector2 screenPosition = new Vector2(mstate.X, mstate.Y);
+            
+            camera.ToWorld(ref screenPosition, out mousePosition);
+
+            mousePosition.X -= camera.Width / 2;
+            mousePosition.Y -= camera.Height / 2;
+          
             if (mstate.LeftButton == ButtonState.Pressed)
             {
                 if (mode == ControllerState.NORMAL) { 
@@ -150,9 +163,9 @@ namespace steampunkRTS
                     {
                         ICommandable commandable = entity as ICommandable;
 
-                        if (commandable != null)
+                        if (commandable != null && entity as EnemyTroop == null)
                         {
-                            if (commandable.getBoundingBox().Contains(new Vector2(mstate.X, mstate.Y)))
+                            if (commandable.getBoundingBox().Contains(new Vector2((int)mousePosition.X, (int)mousePosition.Y)))
                             {
                                 selectedEntity = commandable;
                                 generateButtons(selectedEntity);
@@ -163,14 +176,14 @@ namespace steampunkRTS
 
                     foreach (TextButton button in buttons)
                     {
-                        if (button.ContainsGlobalPoint(new Point(mstate.X, mstate.Y)))
+                        if (button.ContainsGlobalPoint(new Point((int)mousePosition.X, (int)mousePosition.Y)))
                         {
                             shouldDeselect = false;
                         }
                     }
                     foreach (TextButton button in globalButtons)
                     {
-                        if (button.ContainsGlobalPoint(new Point(mstate.X, mstate.Y)))
+                        if (button.ContainsGlobalPoint(new Point((int)mousePosition.X, (int)mousePosition.Y)))
                         {
                             shouldDeselect = false;
                         }
@@ -185,11 +198,11 @@ namespace steampunkRTS
                 else if (mode == ControllerState.PLACING_FACTORY)
                 {
                     Factory newFactory = new Factory();
-                    newFactory.x = mstate.X;
-                    newFactory.targetX = mstate.X;
+                    newFactory.x = (int)mousePosition.X;
+                    newFactory.targetX = (int)mousePosition.X;
 
-                    newFactory.y = mstate.Y;
-                    newFactory.targetY = mstate.Y;
+                    newFactory.y = (int)mousePosition.Y;
+                    newFactory.targetY = (int)mousePosition.Y;
 
                     newFactory.texture = map.Get(TextureID.FACTORY);
                     newFactory.troopTexture = map.Get(TextureID.TROOP);
@@ -204,8 +217,8 @@ namespace steampunkRTS
                 {
                     Mine newMine = new Mine();
 
-                    newMine.x = mstate.X;
-                    newMine.y = mstate.Y;
+                    newMine.x = (int)mousePosition.X;
+                    newMine.y = (int)mousePosition.Y;
 
                     newMine.texture = map.Get(TextureID.MINE);
 
@@ -221,7 +234,7 @@ namespace steampunkRTS
 
             if (mstate.RightButton == ButtonState.Pressed && selectedEntity != null && mode == ControllerState.NORMAL)
             {
-                selectedEntity.receiveCommand(new MoveCommand(mstate.X, mstate.Y));
+                selectedEntity.receiveCommand(new MoveCommand((int)mousePosition.X, (int)mousePosition.Y));
             }
         }
 

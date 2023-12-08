@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Myra;
 using Myra.Graphics2D.UI;
+using Comora;
+using System;
+using System.Diagnostics;
 
 namespace steampunkRTS
 {
@@ -15,8 +18,11 @@ namespace steampunkRTS
         private List<IEntity> entities;
 
         private PlayerController playerController;
+        private AiController aiController;
 
         private Desktop _desktop;
+
+        private Camera camera;
 
         public Game1()
         {
@@ -58,8 +64,10 @@ namespace steampunkRTS
             map.Add(TextureID.MINE, Content.Load<Texture2D>("minetest"));
             map.Add(TextureID.TROOP, Content.Load<Texture2D>("trooptest"));
 
-            playerController = new PlayerController(grid, entities, map);
+            camera = new Camera(_graphics.GraphicsDevice);
 
+            playerController = new PlayerController(grid, camera, entities, map);
+            aiController = new AiController(entities, map);        
         }
 
         protected override void Update(GameTime gameTime)
@@ -67,13 +75,30 @@ namespace steampunkRTS
             KeyboardState kstate = Keyboard.GetState();
             MouseState mstate = Mouse.GetState();
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || kstate.IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            if (kstate.IsKeyDown(Keys.Left))
+            {
+                camera.Transform.Position = new Vector2(camera.Transform.Position.X - 5, camera.Transform.Position.Y);
+            }
+            else if (kstate.IsKeyDown(Keys.Right))
+            {
+                camera.Transform.Position = new Vector2(camera.Transform.Position.X + 5, camera.Transform.Position.Y);
+            }
+
+            if (kstate.IsKeyDown(Keys.Up))
+            {
+                camera.Transform.Position = new Vector2(camera.Transform.Position.X, camera.Transform.Position.Y - 5);
+            }
+            else if (kstate.IsKeyDown(Keys.Down))
+            {
+                camera.Transform.Position = new Vector2(camera.Transform.Position.X, camera.Transform.Position.Y + 5);
+            }
 
             entityTick(kstate, mstate, gameTime);
             playerController.commandEntities(kstate, mstate);
+            aiController.commandEntities(kstate, mstate);
 
             base.Update(gameTime);
         }
@@ -90,7 +115,7 @@ namespace steampunkRTS
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(camera);
             renderEntities();
             _spriteBatch.End();
 

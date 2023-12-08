@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Input;
+using Myra.Graphics2D.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,15 @@ namespace steampunkRTS
 
         float averageX = 0;
         float averageY = 0;
+        public AiController(List<IEntity> entities, TextureMap map)
+        {
+            this.entities = entities;
+
+            EnemyTroop enemyTroop = new EnemyTroop(100, 100);
+            enemyTroop.texture = map.Get(TextureID.TROOP);
+
+            entities.Add(enemyTroop);
+        }
         public void commandEntities(KeyboardState keyboardState, MouseState mouseState)
         {
             float newAverageX = 0;
@@ -36,6 +46,7 @@ namespace steampunkRTS
                     Troop playerTroop = entity as Troop;
                     if (playerTroop != null)
                     {
+                        numberOfEnemies++;
                         newAverageX += playerTroop.x;
                         newAverageY += playerTroop.y;
                     }

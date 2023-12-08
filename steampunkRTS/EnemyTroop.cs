@@ -51,7 +51,7 @@ namespace steampunkRTS
 
         public void render(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, new Vector2(x, y), Color.White); throw new NotImplementedException();
+            spriteBatch.Draw(texture, new Vector2(x, y), Color.White); 
         }
 
         public void update(KeyboardState kstate, MouseState mstate, GameTime gameTime)
