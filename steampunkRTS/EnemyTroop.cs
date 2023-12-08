@@ -9,31 +9,77 @@ using System.Threading.Tasks;
 
 namespace steampunkRTS
 {
-    internal class EnemyTroop : ICommandable, IRenderableEntity,
+    internal class EnemyTroop : ICommandable, IRenderableEntity
     {
+        public float x = 0f, y = 0f;
+        int width = 32, height = 32;
+
+        int speed = 4;
+
+        public Texture2D texture;
+
+        public float targetX = 0f, targetY = 0f;
+
+        public EnemyTroop(float x, float y)
+        {
+            this.x = x;
+            this.y = y;
+            targetX = x;
+            targetY = y;
+        }
         public Rectangle getBoundingBox()
         {
-            throw new NotImplementedException();
+            //figure out how to give it a position and a width and height
+            return new Rectangle((int)x, (int)y, width, height);
         }
 
         public List<(string, int)> getGuiCommands()
         {
-            throw new NotImplementedException();
+            return new List<(string, int)>();
         }
 
         public void receiveCommand(Command command)
         {
-            throw new NotImplementedException();
+            MoveCommand moveCommand = command as MoveCommand;
+
+            if (moveCommand != null)
+            {
+                targetX = moveCommand.x;
+                targetY = moveCommand.y;
+            }
         }
 
         public void render(SpriteBatch spriteBatch)
         {
-            throw new NotImplementedException();
+            spriteBatch.Draw(texture, new Vector2(x, y), Color.White); throw new NotImplementedException();
         }
 
         public void update(KeyboardState kstate, MouseState mstate, GameTime gameTime)
         {
-            throw new NotImplementedException();
+            if (targetX - x == 0 && targetY - y == 0)
+            {
+                return;
+            }
+            Vector2 movement = Vector2.Normalize(new Vector2(targetX - x, targetY - y)) * speed;
+
+            bool right = x < targetX;
+            bool down = y < targetY;
+
+            x += movement.X;
+            y += movement.Y;
+
+            bool rightNow = x < targetX;
+            bool downNow = y < targetY;
+
+            if ((right && !rightNow) || (!right && rightNow))
+            {
+                x = targetX;
+            }
+
+            if ((down && !downNow) || (!down && downNow))
+            {
+                y = targetY;
+            }
         }
     }
 }
