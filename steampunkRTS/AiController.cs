@@ -2,6 +2,7 @@
 using Myra.Graphics2D.UI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,10 +21,21 @@ namespace steampunkRTS
         {
             this.entities = entities;
 
-            EnemyTroop enemyTroop = new EnemyTroop(100, 100);
-            enemyTroop.texture = map.Get(TextureID.TROOP);
+            Mine mine = new Mine();
+            mine.controller = this;
+            mine.x = 150;
+            mine.y = 150;
+            mine.texture = map.Get(TextureID.MINE);
 
-            entities.Add(enemyTroop);
+            entities.Add(mine);
+
+            EnemyFactory enemyFactory = new EnemyFactory();
+            enemyFactory.x = 100;
+            enemyFactory.y = 100;
+            enemyFactory.texture = map.Get(TextureID.FACTORY);
+            enemyFactory.troopTexture = map.Get(TextureID.TROOP);
+
+            entities.Add(enemyFactory);
         }
         public void commandEntities(KeyboardState keyboardState, MouseState mouseState)
         {
@@ -31,12 +43,14 @@ namespace steampunkRTS
             float newAverageY = 0;
 
             int numberOfEnemies = 0;
-            foreach (IEntity entity in entities)
+            for (int i = 0; i < entities.Count(); i++)
             {
+                IEntity entity = entities[i];
                 EnemyTroop troop = entity as EnemyTroop;
                 if (troop != null)
                 {
-                    if (averageX != 0 && averageY != 0)
+                    
+                    if (averageX != 0 || averageY != 0)
                     {
                         troop.receiveCommand(new MoveCommand(averageX, averageY));
                     }
@@ -49,6 +63,18 @@ namespace steampunkRTS
                         numberOfEnemies++;
                         newAverageX += playerTroop.x;
                         newAverageY += playerTroop.y;
+                    }
+                    else
+                    {
+                        EnemyFactory enemyFactory = entity as EnemyFactory;
+                        if (enemyFactory != null && money > 15)
+                        {
+                            money -= 15;
+                            enemyFactory.targetX = averageX == 0 ? enemyFactory.x : averageX;
+                            enemyFactory.targetY = averageY == 0 ? enemyFactory.y : averageY;
+
+                            enemyFactory.receiveCommand(new GuiCommand("Make Troop", entities));
+                        }
                     }
                 }
             }
@@ -64,12 +90,12 @@ namespace steampunkRTS
 
         public int getMoney()
         {
-            throw new NotImplementedException();
+            return money;
         }
 
         public void setMoney(int x)
         {
-            throw new NotImplementedException();
+            money = x;
         }
     }
 }

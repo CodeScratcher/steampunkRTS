@@ -176,14 +176,14 @@ namespace steampunkRTS
 
                     foreach (TextButton button in buttons)
                     {
-                        if (button.ContainsGlobalPoint(new Point((int)mousePosition.X, (int)mousePosition.Y)))
+                        if (button.ContainsGlobalPoint(new Point((int)screenPosition.X, (int)screenPosition.Y)))
                         {
                             shouldDeselect = false;
                         }
                     }
                     foreach (TextButton button in globalButtons)
                     {
-                        if (button.ContainsGlobalPoint(new Point((int)mousePosition.X, (int)mousePosition.Y)))
+                        if (button.ContainsGlobalPoint(new Point((int)screenPosition.X, (int)screenPosition.Y)))
                         {
                             shouldDeselect = false;
                         }

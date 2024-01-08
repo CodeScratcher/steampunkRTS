@@ -22,6 +22,7 @@ namespace steampunkRTS
 
         public EnemyTroop(float x, float y)
         {
+            
             this.x = x;
             this.y = y;
             targetX = x;
