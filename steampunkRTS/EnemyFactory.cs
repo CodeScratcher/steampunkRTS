@@ -21,6 +21,8 @@ namespace steampunkRTS
         public Texture2D texture;
         public Texture2D troopTexture;
 
+        public Random random;
+
         public Rectangle getBoundingBox()
         {
             return new Rectangle((int)x, (int)y, width, height);

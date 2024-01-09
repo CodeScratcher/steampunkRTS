@@ -67,7 +67,9 @@ namespace steampunkRTS
             camera = new Camera(_graphics.GraphicsDevice);
 
             playerController = new PlayerController(grid, camera, entities, map);
-            aiController = new AiController(entities, map);        
+            aiController = new AiController(entities, map);
+
+            entities.Add(aiController);
         }
 
         protected override void Update(GameTime gameTime)

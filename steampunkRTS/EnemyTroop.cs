@@ -19,7 +19,7 @@ namespace steampunkRTS
         public Texture2D texture;
 
         public float targetX = 0f, targetY = 0f;
-
+        public float offsetX = 0f, offsetY = 0f;   
         public EnemyTroop(float x, float y)
         {
             
@@ -45,8 +45,8 @@ namespace steampunkRTS
 
             if (moveCommand != null)
             {
-                targetX = moveCommand.x;
-                targetY = moveCommand.y;
+                targetX = moveCommand.x + offsetX;
+                targetY = moveCommand.y + offsetY;
             }
         }
 
