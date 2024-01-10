@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ namespace steampunkRTS
         int width = 32, height = 32;
 
         int speed = 4;
+
+        public int hp = 50;
 
         public Texture2D texture;
 
@@ -53,6 +56,29 @@ namespace steampunkRTS
         public void render(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, new Vector2(x, y), Color.White); 
+        }
+
+        public void calculateDamage(List<IEntity> entities)
+        {
+            foreach (IEntity entity in new List<IEntity>(entities))
+            {
+                Troop troop = entity as Troop;
+                if (troop != null)
+                {
+                    if (troop.x > x - 100 && troop.x < x + 100 && troop.y > y - 100 && troop.y < y + 100)
+                    {
+                        Debug.WriteLine($"Enemy Test HP: {hp}");
+                        hp -= 1;
+                        
+                        if (hp <= 0)
+                        {
+                            entities.Remove(this);
+                        }
+                    }
+                }
+
+
+            }
         }
 
         public void update(KeyboardState kstate, MouseState mstate, GameTime gameTime)

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace steampunkRTS
 {
-    internal class PlayerController : Controller
+    internal class PlayerController : Controller, IEntity
     {
         private enum ControllerState
         {
@@ -41,6 +41,8 @@ namespace steampunkRTS
         private TextureMap map;
 
         private Camera camera;
+
+        float timer;
 
         public PlayerController(Grid grid, Camera camera, List<IEntity> entities, TextureMap map)
         {
@@ -153,7 +155,9 @@ namespace steampunkRTS
 
             mousePosition.X -= camera.Width / 2;
             mousePosition.Y -= camera.Height / 2;
-          
+
+            float newTimer = timer;
+            
             if (mstate.LeftButton == ButtonState.Pressed)
             {
                 if (mode == ControllerState.NORMAL) { 
@@ -163,7 +167,7 @@ namespace steampunkRTS
                     {
                         ICommandable commandable = entity as ICommandable;
 
-                        if (commandable != null && entity as EnemyTroop == null)
+                        if (commandable != null && (entity as Troop != null || entity as Factory != null))
                         {
                             if (commandable.getBoundingBox().Contains(new Vector2((int)mousePosition.X, (int)mousePosition.Y)))
                             {
@@ -171,6 +175,8 @@ namespace steampunkRTS
                                 generateButtons(selectedEntity);
                                 shouldDeselect = false;
                             }
+
+                            
                         }   
                     }
 
@@ -236,6 +242,19 @@ namespace steampunkRTS
             {
                 selectedEntity.receiveCommand(new MoveCommand((int)mousePosition.X, (int)mousePosition.Y));
             }
+
+            foreach (IEntity entity in new List<IEntity>(entities))
+            {
+                Troop troop = entity as Troop;
+                if (troop != null && timer > 1)
+                {
+                    newTimer = 0;
+
+                    troop.calculateDamage(entities);
+                }
+            }
+
+            timer = newTimer;
         }
 
         public void setMoney(int x)
@@ -247,6 +266,11 @@ namespace steampunkRTS
         public int getMoney()
         {
             return money;
+        }
+
+        public void update(KeyboardState kstate, MouseState mstate, GameTime gameTime)
+        {
+            timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
     }
 }

@@ -69,6 +69,7 @@ namespace steampunkRTS
             playerController = new PlayerController(grid, camera, entities, map);
             aiController = new AiController(entities, map);
 
+            entities.Add(playerController);
             entities.Add(aiController);
         }
 

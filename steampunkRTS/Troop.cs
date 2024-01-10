@@ -19,6 +19,8 @@ namespace steampunkRTS
 
         public float targetX = 0f, targetY = 0f;
 
+        public int hp = 50;
+
         public Texture2D texture;
 
         public Troop(float x, float y)
@@ -48,6 +50,29 @@ namespace steampunkRTS
         public void render(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, new Vector2(x, y), Color.White);
+        }
+
+        public void calculateDamage(List<IEntity> entities)
+        {
+            foreach (IEntity entity in new List<IEntity>(entities))
+            {
+                EnemyTroop troop = entity as EnemyTroop;
+                if (troop != null)
+                {
+                    if (troop.x > x - 100 && troop.x < x + 100 && troop.y > y - 100 && troop.y < y + 100)
+                    {
+                        Debug.WriteLine($"Test HP: {hp}");
+                        hp -= 1;
+
+                        if (hp <= 0)
+                        {
+                            entities.Remove(this);
+                        }
+                    }
+                }
+
+
+            }
         }
 
         public void update(KeyboardState kstate, MouseState mstate, GameTime gameTime)

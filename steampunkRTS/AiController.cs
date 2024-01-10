@@ -49,16 +49,21 @@ namespace steampunkRTS
 
             float newTimer = timer;
 
-            for (int i = 0; i < entities.Count(); i++)
+            foreach (IEntity entity in new List<IEntity>(entities))
             {
-                IEntity entity = entities[i];
                 EnemyTroop troop = entity as EnemyTroop;
                 if (troop != null)
                 {
+                    if (timer > 1)
+                    {
+                        Debug.WriteLine(timer);
+                        troop.calculateDamage(entities);
+                    }
 
                     if ((averageX != 0 || averageY != 0) && !acceptablyClose(troop.targetX, troop.targetY, averageX, averageY) && timer > 1)
                     {
                         troop.receiveCommand(new MoveCommand(averageX + random.Next(-100, 100), averageY + random.Next(-100, 100)));
+                        timer = 0;
                     }
                 }
                 else
@@ -126,7 +131,6 @@ namespace steampunkRTS
             }
 
             timer = newTimer;
-            
         }
 
         public int getMoney()
