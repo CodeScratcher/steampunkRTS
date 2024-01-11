@@ -58,12 +58,12 @@ namespace steampunkRTS
                     {
                         Debug.WriteLine(timer);
                         troop.calculateDamage(entities);
+                        newTimer = 0;
                     }
 
                     if ((averageX != 0 || averageY != 0) && !acceptablyClose(troop.targetX, troop.targetY, averageX, averageY) && timer > 1)
                     {
                         troop.receiveCommand(new MoveCommand(averageX + random.Next(-100, 100), averageY + random.Next(-100, 100)));
-                        timer = 0;
                     }
                 }
                 else
@@ -86,6 +86,8 @@ namespace steampunkRTS
 
                             enemyFactory.receiveCommand(new GuiCommand("Make Troop", entities));
                             numberOfTroops++;
+
+                            newTimer = 0;
                         }
                     }
                 }
